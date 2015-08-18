@@ -1,0 +1,68 @@
+<!-- add code to the <head> of the page -->
+<head>
+  <title>Field Trip</title>
+</head>
+
+<!-- add code to the <body> of the page -->
+<body>
+	
+	{{> createProfilePage}}
+</body>
+
+<template name="launchPage">
+	<h1>Field Trip</h1>
+	<button class="login">Login</button>
+	<button class="signup">Sign Up</button>
+</template>
+
+<template name="signupPage">
+	<!-- script needed to make FB login button work -->
+	<div id="fb-root"></div>
+	<script>(function(d, s, id) {
+	  var js, fjs = d.getElementsByTagName(s)[0];
+	  if (d.getElementById(id)) return;
+	  js = d.createElement(s); js.id = id;
+	  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=877724015637296";
+	  fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));</script>
+
+	<h1>Field Trip</h1>
+	<!-- Login via email registration -->
+	<!-- Should replace this with a registration token sent -->
+	<!-- to email that creates password -->
+	<form>
+		Email:
+		<input type="email" name="email"/>
+		<br>Password:
+		<input type="password" name="pwd1"/>
+		<br>Verify Password:
+		<input type="password" name="pwd2"/>
+		<input type="submit" value="Submit"/>
+	</form>
+
+	<!-- Login via Facebook -->
+	<!-- puts the FB button -->
+	<div class="fb-login-button" data-max-rows="1" data-size="icon" data-show-faces="false" data-auto-logout-link="false"></div>
+
+	<!-- login button or shows logged in name + gender -->
+	{{#if currentUser}}
+        {{currentUser.services.facebook.name}} -
+        {{currentUser.services.facebook.gender}}
+        <button id="logout">Logout</button>
+    {{else}}
+        <button id="facebook-login" class="btn btn-default"> Login with Facebook</button>
+    {{/if}}
+
+    <!-- Login via Google -->
+
+</template>
+
+<template name="createProfilePage">
+    <form>
+      <input type="text" value="name" name="firstname"/>
+      <input type="text" value="age" name="age"/>
+      <input type="text" value="location" name="location"/>
+      <input type="text" value="interests" name="interests"/>
+      <input type="submit" value="Submit" />
+    </form>
+</template>
