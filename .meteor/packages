@@ -11,3 +11,6 @@ facebook
 google
 accounts-facebook
 service-configuration
+accounts-ui
+accounts-password
+accounts-google

@@ -7,7 +7,21 @@
 <body>
 	
 	{{> createProfilePage}}
+	{{> hello}}
 </body>
+
+
+
+
+<template name="hello">
+	<h1>Welcome to Field Trip!</h1>
+  	{{> loginButtons}}
+  	<input type="button" value="Click" />
+</template>
+
+<template name="showUsers">
+</template>
+
 
 <template name="launchPage">
 	<h1>Field Trip</h1>
