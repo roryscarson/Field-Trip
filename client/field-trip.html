@@ -13,18 +13,26 @@
 
 
 <template name="matchesPage">
-	<select id="category-select">
+	<select id="user-select">
 	    <option disabled="disabled" selected="selected">Select User</option> 
-	    {{#each listUsers}}
+	    {{#each getUsers}}
 	       <option value="{{name}}">{{name}}</option>
 	    {{/each}}
 	</select>
+	    <!-- Get list of interests, compare to other users and display from highest to lowest match -->
+	<ul>
+	    {{#each getMatches}}
+	    	<!--<li>{{cUser}}: {{matchName}}: {{numMatches}}</li>-->
+			<li>{{name}}: {{age}}: {{location}}: {{interests}}</li> 
+	    {{/each}} 
+	    
+	</ul>
 </template>
 
 <template name="showUsers">
 	<ul>
-		{{#each listUsers}}
-			<li>{{name}}: {{age}}: {{location}}: {{interests}}</li>
+		{{#each getUsers}}
+			<li>{{name}}: {{age}}: {{location}}: {{interests}}</li> 
 		{{/each}}
 	</ul>
 </template>

@@ -4,20 +4,59 @@ Events = new Mongo.Collection('eventList');
 
 if (Meteor.isClient) {
   Template.showUsers.helpers({
-      'listUsers': function(){
+      'getUsers': function(){
           return People.find().fetch();
       }
   });
   Template.matchesPage.helpers({
-    'listUsers': function(){
-          return People.find().fetch();
-      }
+    'getUsers': function(){
+      return People.find().fetch();
+    },
+    'getMatches': function(){
+      var currentUser = Session.get('currentUser');
+      var currentUserInterests = Session.get('currentUserInterests');
+      var userList = People.find().fetch();
+
+      var results = []
+      var matchedInterests = []
+      //replace this with map function
+      userList.forEach(function(user){
+        var comparingUserInterests = user.interests;
+        for (var i = comparingUserInterests.length - 1; i >= 0; i--) {
+          comparingUserInterests[i] = comparingUserInterests[i].trim();
+        };
+        matchedInterests = _.intersection(currentUserInterests, comparingUserInterests)
+        results.push({cUser:currentUser,matchName:user.name,numMatches:matchedInterests.length});
+        return results;
+      });
+
+      //sort results by # of matched interests high -> low
+      results.sort(function(a,b){
+        return b.numMatches - a.numMatches;
+      });
+
+      var sortedMatches = []
+      results.forEach(function(user){
+        console.log("User: "+user.matchName);
+        var search = People.find(user.matchName);
+        console.log("Pushing: "+search);
+        console.log("Obj: "+search.name);
+        sortedMatches.push(search)
+      })
+      
+    return sortedMatches;      
+    }
   });
-  Template.categories.events({
-    "change #category-select": function (event, template) {
-        var category = $(event.currentTarget).val();
-        console.log("category : " + category);
-        // additional code to do what you want with the category
+  
+  Template.matchesPage.events({
+    "change #user-select": function (event, template) {
+        var currentUser = $(event.currentTarget).val();
+        var currentUserInterests = People.findOne({name: currentUser}, {fields: {'interests': 1}}).interests;
+        for (var i = currentUserInterests.length - 1; i >= 0; i--) {
+          currentUserInterests[i] = currentUserInterests[i].trim();
+        };
+        Session.set('currentUser', currentUser);
+        Session.set('currentUserInterests', currentUserInterests);
     }  
   });
 
@@ -94,7 +133,7 @@ if (Meteor.isClient) {
       var name = event.target.firstname.value;
       var age = event.target.age.value;
       var location = event.target.location.value;
-      var interests = event.target.interests.value.split(",");
+      var interests = event.target.interests.value.split(",").trim();
       People.insert({
         name: name,
         age: age,
@@ -103,6 +142,18 @@ if (Meteor.isClient) {
       });
     }
   });
+
+  Meteor.methods({
+    'getMatches': function(currentUser, currentUserInterests){
+      var testInterests = ["Cooking","Driving","Diving","Climbing"];
+      currentUserInterests.forEach(function(interest){
+        var matchedInterests = currentUserInterests.filter(function(val) {
+          return testInterests.indexOf(val) != -1;
+        })
+      })
+    }
+
+  })
 }
 
 
@@ -127,6 +178,7 @@ if (Meteor.isServer) {
         location: location,
         interests: interests
       });
-    }
-  })
+    },
+    
+  });
 }
