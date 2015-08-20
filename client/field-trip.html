@@ -5,23 +5,34 @@
 
 <!-- add code to the <body> of the page -->
 <body>
-	
+	<h1>Welcome to Field Trip!</h1>
 	{{> createProfilePage}}
-	{{> hello}}
+	{{> showUsers}}
+	{{> matchesPage}}
 </body>
 
 
-
-
-<template name="hello">
-	<h1>Welcome to Field Trip!</h1>
-  	{{> loginButtons}}
-  	<input type="button" value="Click" />
+<template name="matchesPage">
+	<select id="category-select">
+	    <option disabled="disabled" selected="selected">Select User</option> 
+	    {{#each listUsers}}
+	       <option value="{{name}}">{{name}}</option>
+	    {{/each}}
+	</select>
 </template>
 
 <template name="showUsers">
+	<ul>
+		{{#each listUsers}}
+			<li>{{name}}: {{age}}: {{location}}: {{interests}}</li>
+		{{/each}}
+	</ul>
 </template>
 
+<template name="loginPage">
+	<h1>Welcome to Field Trip!</h1>
+  	{{> loginButtons}}
+</template>
 
 <template name="launchPage">
 	<h1>Field Trip</h1>
@@ -30,16 +41,6 @@
 </template>
 
 <template name="signupPage">
-	<!-- script needed to make FB login button work -->
-	<div id="fb-root"></div>
-	<script>(function(d, s, id) {
-	  var js, fjs = d.getElementsByTagName(s)[0];
-	  if (d.getElementById(id)) return;
-	  js = d.createElement(s); js.id = id;
-	  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=877724015637296";
-	  fjs.parentNode.insertBefore(js, fjs);
-	}(document, 'script', 'facebook-jssdk'));</script>
-
 	<h1>Field Trip</h1>
 	<!-- Login via email registration -->
 	<!-- Should replace this with a registration token sent -->
@@ -53,22 +54,6 @@
 		<input type="password" name="pwd2"/>
 		<input type="submit" value="Submit"/>
 	</form>
-
-	<!-- Login via Facebook -->
-	<!-- puts the FB button -->
-	<div class="fb-login-button" data-max-rows="1" data-size="icon" data-show-faces="false" data-auto-logout-link="false"></div>
-
-	<!-- login button or shows logged in name + gender -->
-	{{#if currentUser}}
-        {{currentUser.services.facebook.name}} -
-        {{currentUser.services.facebook.gender}}
-        <button id="logout">Logout</button>
-    {{else}}
-        <button id="facebook-login" class="btn btn-default"> Login with Facebook</button>
-    {{/if}}
-
-    <!-- Login via Google -->
-
 </template>
 
 <template name="createProfilePage">
@@ -80,3 +65,5 @@
       <input type="submit" value="Submit" />
     </form>
 </template>
+
+

@@ -1,3 +1,6 @@
+People = new Mongo.Collection('userList');
+Events = new Mongo.Collection('eventList');
+
 Accounts.registerLoginHandler(function(loginRequest) {
   //there are multiple login handlers in meteor. 
   //a login request go through all these handlers to find it's login hander
@@ -22,8 +25,6 @@ Accounts.registerLoginHandler(function(loginRequest) {
 
   //creating the token and adding to the user
   var stampedToken = Accounts._generateStampedLoginToken();
-  //hashing is something added with Meteor 0.7.x, 
-  //you don't need to do hashing in previous versions
   var hashStampedToken = Accounts._hashStampedToken(stampedToken);
   
   Meteor.users.update(userId, 
@@ -36,3 +37,21 @@ Accounts.registerLoginHandler(function(loginRequest) {
     token: stampedToken.token
   }
 });
+
+ /* Template.createProfilePage.events({
+    //"event element": function(DOM Object, this)
+    "submit form": function (event, template) {
+      //insertUserData(event, template);
+      var helperValue = this;
+      var name = event.target.firstname.value;
+      var age = event.target.age.value;
+      var location = event.target.location.value;
+      var interests = event.target.interests.value.split(",");
+      People.insert({
+        name: name,
+        age: age,
+        location: location,
+        interests: interests
+      });
+    }
+  });*/
